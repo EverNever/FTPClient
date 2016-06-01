@@ -108,15 +108,17 @@ public class FTPClient {
             String tempString = remoteIn.readLine();
             System.out.println("server response: " + tempString);
             Pattern pattern = Pattern
-                    .compile(".+\\(\\d+,\\d+,\\d+,\\d+,(\\d+),(\\d+)\\)");
+                    .compile(".+\\((\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+)\\)");
             Matcher matcher = pattern.matcher(tempString);
             int port1 = 0;
             int port2 = 0;
             if (matcher.find()) {
-                port1 = Integer.parseInt(matcher.group(1));
-                port2 = Integer.parseInt(matcher.group(2));
+                remoteAddress = matcher.group(1) + "." + matcher.group(2) + "." + matcher.group(3) + "." + matcher.group(4);
+                port1 = Integer.parseInt(matcher.group(5));
+                port2 = Integer.parseInt(matcher.group(6));
             }
             remotePort = (port1 << 8) + port2;
+            System.out.println("pasv remote address: " + remoteAddress + ":" + remotePort);
         } catch (IOException e) {
             e.printStackTrace();
         }
